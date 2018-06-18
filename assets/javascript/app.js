@@ -1,12 +1,8 @@
-// qArray is made containing questioni objects
+// questions and their answers
 var qArray = {
     questions: [
-    // a question1 object is made
         q1 = {
-            // question1 is given a question property
-            // a trivia question is put as a string for question1.question
             question: "q1",
-            // question1.answers is given 4 answers - 1 correctAnswer , 3 incorrectAnswer
             answers: [
                 correct = "c1",
                 incorrect1 = "i11",
@@ -14,7 +10,6 @@ var qArray = {
                 incorrect3 ="i13",
             ],
         },
-        // question2
         q2 = {
             question: "q2",
             answers: [
@@ -24,7 +19,6 @@ var qArray = {
                 incorrect3 ="i23",
             ],
         },
-        // question3
         q3 = {
             question: "q3",
             answers: [
@@ -34,7 +28,6 @@ var qArray = {
                 incorrect3 ="i33",
             ],
         },
-        // question4
         q4 = {
             question: "q4",
             answers: [
@@ -44,7 +37,6 @@ var qArray = {
                 incorrect3 ="i43",
             ],
         },
-        // question5
         q5 = {
             question: "q5",
             answers: [
@@ -56,19 +48,41 @@ var qArray = {
         },
     ],
 };
-console.log(qArray.questions[0].answers[0])
-
+// status tracking variables
 var answeredRight = 0;
 var answeredWrong = 0;
+// array used to randomize questions
 var questRandom = [];
-
-
+// question timer variables and functions
+var timeSet = 20;
+var intervalId;
+function run() {
+    clearInterval(intervalId);
+    intervalId = setInterval(decrement, 1000);
+  }
+function decrement() {
+    $("#answer-notify").text(timeSet);
+    timeSet--;
+    if(timeSet < 1){
+        clearInterval(intervalId);
+        $('button').prop("disabled" , true);
+        answeredWrong++
+        $('#answer-notify').text("Times Up! the correct answer is " + qArray.questions[questRandom[questRandom.length-1]].answers[0]);
+        questRandom.pop();
+        timeSet = 20;
+        setTimeout(askQuestion,3000);
+    }
+}
+// question asking function
 function askQuestion(){
+    // timer
+    run();
+    // prints question and answers onto page
     if(questRandom.length > 0){
-        // askQuestion writes questioni.question into #top-header
+        $('#answer-notify').text("")
         $("#top-header").text(qArray.questions[questRandom[questRandom.length-1]].question);
-        $('#game-bottom').html("")
-        // aQ() creates buttons using the questioni.answers
+        $('#game-buttons').html("")
+        // array and function used to put answers on to random buttons
         var randArray = [];
         do{
             var randNumb = Math.floor((Math.random() * 4))
@@ -79,43 +93,46 @@ function askQuestion(){
             }
         }while(randArray.length < 4)
         for(i = 0; i < 4; i++){
-            // var x = randArray[i];
-            $('#game-bottom').append('<button value="' + randArray[i] + '">'+ qArray.questions[questRandom[questRandom.length-1]].answers[randArray[i]] + '</button><br>');
+            $('#game-buttons').append('<button value="' + randArray[i] + '" id = "button'+i+'">'+ qArray.questions[questRandom[questRandom.length-1]].answers[randArray[i]] + '</button><br>');
         }
+        // answer button functions
         $('button').on('click' , function(){
+            $('button').prop("disabled" , true);
             var answerVal = this.value
             if(parseInt(answerVal) === 0){
-                console.log("YES")
+                clearInterval(intervalId);
                 answeredRight++
                 questRandom.pop();
-                askQuestion();
+                timeSet = 20;
+                $('#answer-notify').text("Correct!")
+                setTimeout(askQuestion,3000)
             }else{
-                console.log("no")
+                clearInterval(intervalId);
                 answeredWrong++
+                $('#answer-notify').text("Inorrect! the correct answer is " + qArray.questions[questRandom[questRandom.length-1]].answers[0])
                 questRandom.pop();
-                askQuestion();
+                timeSet = 20;
+                setTimeout(askQuestion,3000)
             }
-            // if(this.includes(qArray.questions[questRandom[0]].answers[0])){
-            //     console.log("y")
-            // }
-            
-            // console.log(qArray.questions[questRandom[0]].answers[0])
         })
+    // final results printed and play again button presented
     }else{
-        $("#top-header").text("here are your results");
-        $('#game-bottom').html("");
-        $('#game-bottom').append("<h3> answered right: " + answeredRight + "</h3>");
-        $('#game-bottom').append("<h3> answered wrong: " + answeredWrong + "</h3>");
-        $('#game-bottom').append("<button>Play Again?</button>");
+        clearInterval(intervalId);
+        $("#top-header").text("Results:");
+        $('#game-buttons').html("");
+        $('#game-buttons').append("<h3> answered right: " + answeredRight + "</h3>");
+        $('#game-buttons').append("<h3> answered wrong: " + answeredWrong + "</h3>");
+        $('#answer-notify').html("<button>Play Again?</button>");
         $('button').on('click' , function(){
             newGame();
         })
     }
 };
+// function for starting and restarting the game
 function newGame(){
     answeredRight = 0;
     answeredWrong = 0;
-    //question randomizer
+    // adds values to array for question order randomization
     do{
         var randNumb = Math.floor((Math.random() * 5))
         if (questRandom.includes(randNumb)){
@@ -123,49 +140,13 @@ function newGame(){
         }else{
             questRandom.push(randNumb);
         }
-    }while(questRandom.length < 5)
-
-    // answeredRight variable is made and set to 0
-    answeredRight = 0;
-    // answerWrong variable is made and set to 0
-    answeredRight = 0;
-    // newGame function defined
-    // #top-header is is given welcome please press start button text
+    }while(questRandom.length < 5);
+    // prints text and button for the start of the game
+    $('#answer-notify').html("");
     $("#top-header").text("Press Start to Begin");
-    // #game-bottom div is given a start button that says start game
-    $("#game-bottom").html('<button>Start</button>');
-    // on click start button, the button empties the #top-header and #game-bottom and runs askQuestion function
-
+    $("#game-buttons").html('<button>Start</button>');
     $('button').on('click' , function(){
-        console.log("test");
         askQuestion();
     })
 }
-    // aQ() randomly puts buttons into #game-bottom
-    // #answer-notify displays a countdown
-    // aQ() sets a timer for 10 seconds
-        // if correct answer button is clicked
-            // timer is stopped
-            // #answer-notify says correct
-            // nextQuestion button is made
-            // timer is set for 3 seconds
-            // if timer reaches 0 || nextQuestion is pressed
-                // question asked is removed from qArray
-                // run askQuestion function
-        // if incorrectAnswer is pressed or timer runs out
-            // timer is stopped
-            // #answer-notify says incorrect
-            // correctAnswer is highlighted
-            // nextQuestion button is made
-            // timer is set for 3 seconds
-            // if timer reaches 0 || nextQuestion is pressed
-                // question asked is removed from qArray
-                // run askQuestion function
-// when qArray is empty
-    // #top-header says heres how you did
-    // #game-bottom writes answeredRight and writes answeredWrong
-    // #answer-notify makes a playAgain button which runs newGame
-
-
-// newGame
 newGame();
