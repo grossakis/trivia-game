@@ -1,9 +1,57 @@
 body{
     text-align: center;
+    font-size: 18px;
+    background-color: #000000;
+    background-image: url(../images/bg2.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    color: #ffffff;
 }
 h1{
     font-size: 36px;
+
 }
 h2{
     font-size: 24px;
+}
+#game-top{
+    width: 80%;
+    border: 2px solid #4b1c1c;
+    background-color:#a53f3f; 
+    font-size: 24px;
+    padding: 10px;
+    margin: auto;
+    border-radius: 10px;
+}
+#answer-notify{
+    text-shadow: 0 0 10px #000000;
+    font-size: 24px;
+    margin-top: 30px;
+}
+button{
+    width: 60%;
+    color: #ffffff;
+    border: 2px solid #4b1c1c;
+    background-color:#a53f3f; 
+    font-size: 24px;
+    padding: 6px;
+    margin: 6px;
+    border-radius: 10px;
+}
+button:hover{
+    background-color: #d6c953;
+    box-shadow: 0 0 20px #ffffff;
+}
+button:disabled{
+    background-color: #866868;
+}
+.highlight:disabled{
+    background-color: #a1973c;
+}
+.logo{
+    margin: auto;
+    width: 80%;
+}
+#top-header{
+    font-size: 36px;
 }
