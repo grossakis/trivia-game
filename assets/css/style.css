@@ -55,6 +55,7 @@ button:disabled{
 .logo{
     margin: auto;
     width: 80%;
+    height: auto;
 }
 #top-header{
     font-size: 36px;
