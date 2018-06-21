@@ -14,6 +14,10 @@ h1{
 h2{
     font-size: 24px;
 }
+img{
+    height: 200px;
+    width: auto;
+}
 #game-top{
     width: 80%;
     border: 2px solid #4b1c1c;

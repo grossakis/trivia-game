@@ -9,6 +9,7 @@ var qArray = {
                 incorrect2 = "Biter",
                 incorrect3 ="Chewy",
             ],
+            gif:"assets/images/nibbler.gif",
         },
         q2 = {
             question: "What is the Secret Ingredient for the Popular Slurm Beverage?",
@@ -18,6 +19,7 @@ var qArray = {
                 incorrect2 = "Intergalactic waste",
                 incorrect3 = "Radioactive cockroaches",
             ],
+            gif:"assets/images/slurm.gif",
         },
         q3 = {
             question: "What is Professor Farnsworth's First Name?",
@@ -27,6 +29,7 @@ var qArray = {
                 incorrect2 = "Sherman",
                 incorrect3 = "Phillip",
             ],
+            gif:"assets/images/farnsworth.gif",
         },
         q4 = {
             question: "Where Do Fry and Bender First Meet Eachother?",
@@ -36,6 +39,7 @@ var qArray = {
                 incorrect2 = "At the edge of the universe",
                 incorrect3 = "On the Planet Express ship",
             ],
+            gif:"assets/images/suicide-booth.gif",
         },
         q5 = {
             question: "Why is Fry Immune to the Stupefying Rays of the Giant Brains?",
@@ -45,6 +49,7 @@ var qArray = {
                 incorrect2 = "He is from the past",
                 incorrect3 = "He wears a tin foil helmet",
             ],
+            gif:"assets/images/fry-brain.gif",
         },
         q6 = {
             question: "What is the Name of Bender's Less Evil Bending Unit Counterpart?",
@@ -54,6 +59,7 @@ var qArray = {
                 incorrect2 = "Folder",
                 incorrect3 = "Anglo",
             ],
+            gif:"assets/images/flexo.gif",
         },
         q7 = {
             question: "What Olympic Sport Did Hermes Compete In?",
@@ -63,6 +69,7 @@ var qArray = {
                 incorrect2 = "Blernsball",
                 incorrect3 = "Solar surfing",
             ],
+            gif:"assets/images/hermes.gif",
         },
         q8 = {
             question: "What Lost City Did the Planet Express Crew Travel to the Bottom of the Ocean to Visit?",
@@ -72,6 +79,7 @@ var qArray = {
                 incorrect2 = "San Francisco",
                 incorrect3 = "Asguard",
             ],
+            gif:"assets/images/atlanta.gif",
         },
         q9 = {
             question: "How Does Fry Temporarily Become Emperor of a Planet?",
@@ -81,6 +89,7 @@ var qArray = {
                 incorrect2 = "He is elected emperor",
                 incorrect3 = "He saves the planet's population from extinction",
             ],
+            gif:"assets/images/fry-drink.gif",
         },
         q10 = {
             question: "What Happens to Bender When a Magnet is Put to His Head?",
@@ -90,13 +99,74 @@ var qArray = {
                 incorrect2 = "His memory is erased",
                 incorrect3 = "He starts uncontrollably breakdancing",
             ],
+            gif:"assets/images/bender-dancing.gif",
+        },
+        q11 = {
+            question: "What is Captain Brannigan's first name?",
+            answers: [
+                correct = "Zapp",
+                incorrect1 = "Buzz",
+                incorrect2 = "Kiff",
+                incorrect3 = "Bob",
+            ],
+            gif:"assets/images/zapp.gif",
+        },
+        q12 = {
+            question: "What is the name of the monkey who is granted super intelligence via a hat designed by Professor Farnsworth?",
+            answers: [
+                correct = "Gunther",
+                incorrect1 = "Bobo",
+                incorrect2 = "Artemis",
+                incorrect3 = "Flynn",
+            ],
+            gif:"assets/images/monkey.gif",
+        },
+        q13 = {
+            question: "What song does Fry's dog sing?",
+            answers: [
+                correct = "I'm Walking on Sunshine",
+                incorrect1 = "Build Me Up Buttercup",
+                incorrect2 = "Don't Worry, Be Happy",
+                incorrect3 = "Somewhere Over the Rainbow",
+            ],
+            gif:"assets/images/fry-dog.gif",
+        },
+        q14 = {
+            question: "What is Zoidberg's profession?",
+            answers: [
+                correct = "Doctor",
+                incorrect1 = "Lawyer",
+                incorrect2 = "Delivery-Man",
+                incorrect3 = "Garbage-Man",
+            ],
+            gif:"assets/images/zoidberg.gif",
+        },
+        q15 = {
+            question: "Which of the following characters is a girl from Mars?",
+            answers: [
+                correct = "Amy",
+                incorrect1 = "Leela",
+                incorrect2 = "Petunia",
+                incorrect3 = "Mom",
+            ],
+            gif:"assets/images/amy.gif",
+        },
+        q16 = {
+            question: "Who is the Planet Express janitor?",
+            answers: [
+                correct = "Scruffy",
+                incorrect1 = "Fry",
+                incorrect2 = "Kiff",
+                incorrect3 = "Cubert",
+            ],
+            gif:"assets/images/scruffy.gif",
         },
     ],
 };
 // status tracking variables
 var answeredRight = 0;
 var answeredWrong = 0;
-// array used to randomize questions
+// array used store random values to randomize questions
 var questRandom = [];
 // question timer variables and functions
 var timeSet = 20;
@@ -109,6 +179,8 @@ function decrement() {
     $("#answer-notify").text("Time left to answer: " + timeSet);
     timeSet--;
     if(timeSet < 0){
+        $('#wrong-buzz').get(0).volume = 0.2;
+        $('#wrong-buzz').get(0).play();
         clearInterval(intervalId);
         $('button').prop("disabled" , true);
         answeredWrong++
@@ -120,11 +192,13 @@ function decrement() {
 }
 // question asking function
 function askQuestion(){
-    $("#answer-notify").text("Time left to answer: ")
+    $('#gif-space').html("");
+    $("#answer-notify").text("Time left to answer: ");
     // timer
     run();
     // prints question and answer buttons onto page
     if(questRandom.length > 0){
+        var answerGif = qArray.questions[questRandom[questRandom.length-1]].gif;
         $('#answer-notify').text("")
         $("#top-header").text(qArray.questions[questRandom[questRandom.length-1]].question);
         $('#game-buttons').html("")
@@ -144,9 +218,12 @@ function askQuestion(){
         $('button[value=0]').addClass('highlight');
         // answer button functions
         $('button').on('click' , function(){
+            $('#gif-space').html('<img src="' + answerGif+ '"/>')
             $('button').prop("disabled" , true);
             var answerVal = this.value
             if(parseInt(answerVal) === 0){
+                $('#right-ding').get(0).volume = 0.2;
+                $('#right-ding').get(0).play();
                 clearInterval(intervalId);
                 answeredRight++
                 questRandom.pop();
@@ -154,9 +231,11 @@ function askQuestion(){
                 $('#answer-notify').text("Correct!")
                 setTimeout(askQuestion,3000)
             }else{
+                $('#wrong-buzz').get(0).volume = 0.2;
+                $('#wrong-buzz').get(0).play();
                 clearInterval(intervalId);
                 answeredWrong++
-                $('#answer-notify').text("Inorrect! the correct answer is " + qArray.questions[questRandom[questRandom.length-1]].answers[0])
+                $('#answer-notify').text("Inorrect! the correct answer is: " + qArray.questions[questRandom[questRandom.length-1]].answers[0])
                 questRandom.pop();
                 timeSet = 20;
                 setTimeout(askQuestion,3000)
@@ -171,6 +250,7 @@ function askQuestion(){
         $('#game-results').append("<h3> Incorrect/Missed Answers: " + answeredWrong + "</h3>");
         $('#answer-notify').html("<button>Play Again?</button>");
         $('button').on('click' , function(){
+            $('#blip').get(0).play();
             $('#game-results').html("");
             $("#top-header").text("");
             newGame();
@@ -196,6 +276,7 @@ function newGame(){
     $("#answer-notify").text("Press Start to Begin");
     $("#game-buttons").html('<button>Start</button>');
     $('button').on('click' , function(){
+        $('#blip').get(0).play();
         $("#trivia-start").html("");
         askQuestion();
     })
