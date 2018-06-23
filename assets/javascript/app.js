@@ -142,7 +142,7 @@ var qArray = {
             gif:"assets/images/zoidberg.gif",
         },
         q15 = {
-            question: "Which of the following characters is a girl from Mars?",
+            question: "Which of the following characters is a rich girl from Mars?",
             answers: [
                 correct = "Amy",
                 incorrect1 = "Leela",
