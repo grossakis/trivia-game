@@ -3,8 +3,8 @@ body{
     font-size: 18px;
     background-color: #000000;
     background-image: url(../images/bg.jpg);
+    background-size: 100% 100%;
     background-attachment: fixed;
-    background-position: center;
     color: #ffffff;
 }
 h1{
